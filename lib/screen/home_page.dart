@@ -27,51 +27,59 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-              child: FutureBuilder<MovieModel>(
-                future: getMoviesApi (),
-                builder: (context, snapshot){
-                  if(snapshot.hasData){
-                    return ListView.builder(
-                      itemCount: snapshot.data!.data!.length,
-                      itemBuilder: (context, index){
-                        return Container(
-                          height: 150,
-                          width: double.infinity,
-                          child:
-                          Row(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width*0.55,
-                                child: Image(image: NetworkImage(snapshot.data!.data![index].thumbnail.toString()),fit: BoxFit.cover,),
-                              ),
-                              SizedBox(width: 10,),
-                              Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(snapshot.data!.data![index].title.toString(),
-                                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                                    Text(snapshot.data!.data![index].year.toString()),
-                                    Text(snapshot.data!.data![index].ratings.toString()),
-                                  ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+                child: FutureBuilder<MovieModel>(
+                  future: getMoviesApi (),
+                  builder: (context, snapshot){
+                    if(snapshot.hasData){
+                      return ListView.builder(
+                        itemCount: snapshot.data!.data!.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            height: 150,
+                            width: double.infinity,
+                            child:
+                            Row(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width*0.55,
+                                  child: Image(image: NetworkImage(snapshot.data!.data![index].thumbnail.toString()),fit: BoxFit.cover,),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }else{
-                    return Center(child: Text('Loading'));
-                  }
-                },
-              )
-          )
-        ],
+                                SizedBox(width: 10,),
+                                Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(snapshot.data!.data![index].title.toString(),
+                                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                                      Text(snapshot.data!.data![index].year.toString()),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.star,color: Colors.amber,),
+                                          SizedBox(width: 5,),
+                                          Text(snapshot.data!.data![index].ratings!.imDb.toString()),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }else{
+                      return Center(child: Text('Loading'));
+                    }
+                  },
+                )
+            )
+          ],
+        ),
       )
     );
   }

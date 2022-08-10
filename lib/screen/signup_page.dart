@@ -54,7 +54,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if(response.statusCode == 201){
         print("Account Created");
         //Fluttertoast.showToast(msg: 'Account Created');
-        Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_)=>SignInPage()));
       }else{
         print("Failed");
       }

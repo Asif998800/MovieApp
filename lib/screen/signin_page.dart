@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:movie_app/screen/signup_page.dart';
-
 import 'home_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -16,6 +19,8 @@ class _SignInPageState extends State<SignInPage> {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final storage = new FlutterSecureStorage();
+
 
   Future signIn() async {
     try{
@@ -23,8 +28,11 @@ class _SignInPageState extends State<SignInPage> {
           body: {"email": _emailController.text, "password": _passwordController.text
           });
       if(response.statusCode == 201){
+        var data = jsonDecode(response.body.toString());
+        print(data["token"]);
+        await storage.write(key: "token", value: data["token"]);
         print("Welcome");
-        Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);
       }else{
         print("Failed");
       }
