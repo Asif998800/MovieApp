@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:movie_app/screen/signup_page.dart';
+import 'package:movie_app/widget/customButton.dart';
+import 'package:movie_app/widget/customTextField.dart';
 import 'home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -65,7 +67,6 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
               child: Container(
                 margin: EdgeInsets.only(top: 200,left: 20),
                 child: Container(
@@ -84,13 +85,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       SizedBox(height: 25),
                       //Form
-                      TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: TextStyle(color: Colors.red),
-                          prefixIcon: Icon(Icons.email,color: Colors.red,),
-                        ),),
+                      customTextField("Email", _emailController, Icons.email),
                       SizedBox(height: 5),
                       TextField(
                         controller: _passwordController,
@@ -102,18 +97,9 @@ class _SignInPageState extends State<SignInPage> {
                         ),),
                       SizedBox(height: 70),
                       //Sign in Button
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(340, 50),
-                          primary: Colors.red, // background
-                          onPrimary: Colors.white, // foreground
-                          elevation: 15,
-                        ),
-                        onPressed: () {
-                          signIn();
-                        },
-                        child: Text('SIGN IN',style: TextStyle(fontSize: 18),),
-                      ),
+                      customButton("SIGN IN", (){
+                        signIn();
+                      }),
                       SizedBox(height: 50),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

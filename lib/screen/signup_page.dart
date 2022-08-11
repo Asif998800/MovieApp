@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_app/screen/signin_page.dart';
 import 'package:http/http.dart';
+import 'package:movie_app/widget/customTextField.dart';
+
+import '../widget/customButton.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -24,8 +27,13 @@ class _SignUpPageState extends State<SignUpPage> {
           body: {"firstName":firstnameController.text, "lastName":lastnameController.text, "email": emailController.text, "password": passwordController.text
       });
       if(response.statusCode == 201){
-        print("Account Created");
         //Fluttertoast.showToast(msg: 'Account Created');
+        Fluttertoast.showToast(
+            msg: "Account Created",  // message
+            toastLength: Toast.LENGTH_SHORT, // length
+            gravity: ToastGravity.BOTTOM,    // location
+            timeInSecForIosWeb: 1               // duration
+        );
         Navigator.push(context, MaterialPageRoute(builder: (_)=>SignInPage()));
       }else{
         print("Failed");
@@ -71,29 +79,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       SizedBox(height: 25),
-                      TextField(
-                        controller: firstnameController,
-                        decoration: InputDecoration(
-                          hintText: 'First Name',
-                          hintStyle: TextStyle(color: Colors.red),
-                          prefixIcon: Icon(Icons.person,color: Colors.red,),
-                        ),),
+                      customTextField('First Name', firstnameController, Icons.person),
                       SizedBox(height: 15),
-                      TextField(
-                        controller: lastnameController,
-                        decoration: InputDecoration(
-                          hintText: 'Last Name',
-                          hintStyle: TextStyle(color: Colors.red),
-                          prefixIcon: Icon(Icons.person,color: Colors.red,),
-                        ),),
+                      customTextField('Last Name', lastnameController, Icons.person),
                       SizedBox(height: 15),
-                      TextField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: TextStyle(color: Colors.red),
-                          prefixIcon: Icon(Icons.email,color: Colors.red,),
-                        ),),
+                      customTextField('Email', emailController, Icons.email),
                       SizedBox(height: 15),
                       TextField(
                         controller: passwordController,
@@ -104,18 +94,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon: Icon(Icons.lock,color: Colors.red,),
                         ),),
                       SizedBox(height: 40),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(340, 50),
-                          primary: Colors.red, // background
-                          onPrimary: Colors.white, // foreground
-                          elevation: 15,
-                        ),
-                        onPressed: () {
-                          signup();
-                        },
-                        child: Text('Continue',style: TextStyle(fontSize: 18),),
-                      ),
+                      customButton("Continue", (){
+                        signup();
+                      }),
                       SizedBox(height: 50),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
