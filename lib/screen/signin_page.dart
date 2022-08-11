@@ -30,6 +30,7 @@ class _SignInPageState extends State<SignInPage> {
       if(response.statusCode == 201){
         var data = jsonDecode(response.body.toString());
         print(data["token"]);
+        //Flutter Secured Storage
         await storage.write(key: "token", value: data["token"]);
         print("Welcome");
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);

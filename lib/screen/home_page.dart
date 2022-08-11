@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
 import '../Models/MovieModel.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +15,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   
   Future<MovieModel> getMoviesApi () async {
-    final response = await http.get(Uri.parse("https://api-telly-tell.herokuapp.com/movies/rahul.verma"));
+    final storage = new FlutterSecureStorage();
+    Map<String, String> token = await storage.readAll();
+
+
+    //final response = await http.get(Uri.parse("https://api-telly-tell.herokuapp.com/movies/rahul.verma"));
+    final response = await http.get(Uri.parse("https://api-telly-tell.herokuapp.com/movies/rahul.verma"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200){
       return MovieModel.fromJson(data);
@@ -35,45 +45,46 @@ class _HomePageState extends State<HomePage> {
                   future: getMoviesApi (),
                   builder: (context, snapshot){
                     if(snapshot.hasData){
-                      return ListView.builder(
-                        itemCount: snapshot.data!.data!.length,
-                        itemBuilder: (context, index){
-                          return Container(
-                            height: 150,
-                            width: double.infinity,
-                            child:
-                            Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.55,
-                                  child: Image(image: NetworkImage(snapshot.data!.data![index].thumbnail.toString()),fit: BoxFit.cover,),
+                      return GridView.builder(
+                          itemCount: snapshot.data!.data!.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2), 
+                          itemBuilder: (context,index) {
+                            return Card(
+                              elevation: 8,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image(image: NetworkImage(snapshot.data!.data![index].thumbnail.toString()),fit: BoxFit.cover,),
+                                    ),
+                                    Text(snapshot.data!.data![index].title.toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                                    Text(snapshot.data!.data![index].year.toString()),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.star,color: Colors.amber,),
+                                        SizedBox(width: 5,),
+                                        Text(snapshot.data!.data![index].ratings!.imDb.toString()),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 10,),
-                                Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(snapshot.data!.data![index].title.toString(),
-                                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                                      Text(snapshot.data!.data![index].year.toString()),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.star,color: Colors.amber,),
-                                          SizedBox(width: 5,),
-                                          Text(snapshot.data!.data![index].ratings!.imDb.toString()),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                              ),
+                            );
+                          }
                       );
                     }else{
-                      return Center(child: Text('Loading'));
+                      return const Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.redAccent,
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                            strokeWidth: 10,
+                          ),
+                      );
                     }
                   },
                 )

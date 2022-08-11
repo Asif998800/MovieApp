@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:movie_app/screen/home_page.dart';
 import 'package:movie_app/screen/signin_page.dart';
 import 'package:http/http.dart';
 
@@ -18,33 +17,6 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
-
-  // Future login() async {
-  //   try{
-  //     Response response = await post(
-  //       Uri.parse('https://api-telly-tell.herokuapp.com/api/client/signup'),
-  //       body: {
-  //         'firstName': firstnameController.text,
-  //         'lastName': lastnameController.text,
-  //         'email': emailController.text,
-  //         'password': passwordController.text
-  //       }
-  //     );
-  //     if(response.statusCode == 200){
-  //       print('Account created');
-  //     }else{
-  //       print('failed');
-  //     }
-  //   }catch(e) {
-  //     print(e.toString());
-  //   }
-  // }
-
-  // Future signup() async {
-  //   var response = await post(Uri.parse("https://api-telly-tell.herokuapp.com/api/client/signup"),
-  //   body: {"firstName":firstnameController.text, "lastName":lastnameController.text, "email": emailController.text, "password": passwordController.text});
-  //
-  // }
 
   Future signup() async {
     try{
@@ -95,8 +67,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           children: [
                             Text('Welcome Buddy!',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.red),),
                             SizedBox(height: 5),
-                            Text('Glad to see you my buddy',
-                              style: TextStyle(fontSize: 15,color: Colors.black45),),
                           ],
                         ),
                       ),
@@ -108,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           hintStyle: TextStyle(color: Colors.red),
                           prefixIcon: Icon(Icons.person,color: Colors.red,),
                         ),),
-                      SizedBox(height: 25),
+                      SizedBox(height: 15),
                       TextField(
                         controller: lastnameController,
                         decoration: InputDecoration(
@@ -116,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           hintStyle: TextStyle(color: Colors.red),
                           prefixIcon: Icon(Icons.person,color: Colors.red,),
                         ),),
-                      SizedBox(height: 25),
+                      SizedBox(height: 15),
                       TextField(
                         controller: emailController,
                         decoration: InputDecoration(
@@ -124,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           hintStyle: TextStyle(color: Colors.red),
                           prefixIcon: Icon(Icons.email,color: Colors.red,),
                         ),),
-                      SizedBox(height: 5),
+                      SizedBox(height: 15),
                       TextField(
                         controller: passwordController,
                         obscureText: true,
@@ -133,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           hintStyle: TextStyle(color: Colors.red),
                           prefixIcon: Icon(Icons.lock,color: Colors.red,),
                         ),),
-                      SizedBox(height: 70),
+                      SizedBox(height: 40),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(340, 50),
@@ -142,7 +112,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           elevation: 15,
                         ),
                         onPressed: () {
-                          // login();
                           signup();
                         },
                         child: Text('Continue',style: TextStyle(fontSize: 18),),
